@@ -1,7 +1,8 @@
-'use strict';
+'use strict'
 
-module.exports = utils;
+module.exports = utils
 
 function utils() {
-  return 'Hello from utils';
+  console.log('====')
+  return 'Hello from utils'
 }
