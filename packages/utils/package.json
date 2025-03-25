@@ -1,6 +1,6 @@
 {
   "name": "@minorn-cli/utils",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "minorn-cli utils",
   "author": "minorn <1481700559@qq.com>",
   "homepage": "",
@@ -18,6 +18,5 @@
   },
   "scripts": {
     "test": "node ./__tests__/utils.test.js"
-  },
-  "gitHead": "56fdc1bb1e5a6f282f98d8adba34f8a8d72e04f8"
+  }
 }
