@@ -1,0 +1,17 @@
+{
+  "name": "minorn-cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "workspaces": [],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@lerna/legacy-package-management": "^8.2.1",
+    "lerna": "^8.2.1"
+  }
+}
