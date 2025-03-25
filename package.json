@@ -13,5 +13,8 @@
   "devDependencies": {
     "@lerna/legacy-package-management": "^8.2.1",
     "lerna": "^8.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
