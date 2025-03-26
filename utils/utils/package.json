@@ -1,7 +1,7 @@
 {
-  "name": "@minorn-cli/core",
+  "name": "@minorn-cli/utils",
   "version": "1.0.3",
-  "description": "minorn-cli core",
+  "description": "minorn-cli utils",
   "author": "minorn <1481700559@qq.com>",
   "homepage": "",
   "license": "ISC",
@@ -17,6 +17,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "node ./__tests__/core.test.js"
-  }
+    "test": "node ./__tests__/utils.test.js"
+  },
+  "dependencies": {}
 }
