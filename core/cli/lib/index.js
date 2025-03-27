@@ -13,7 +13,7 @@ const constant = require("./const")
 
 let args, config
 
-function core() {
+async function core() {
   try {
     checkPkgVersion()
     checkNodeVersion()
@@ -21,7 +21,8 @@ function core() {
     checkUserHome()
     checkInputArgs()
     checkEnv()
-    log.verbose("debug", "test debug")
+    await checkGlobalUpdate()
+    log.verbose("debug", "已经进入verbose模式")
   } catch (e) {
     log.error(e.message)
   }
@@ -94,4 +95,13 @@ function createDefaultConfig() {
     cliConfig["cliHome"] = path.join(userHome, constant.DEFAULT_CLI_HOME)
   }
   process.env.CLI_HOME_PATH = cliConfig.cliHome
+}
+
+// 检查是否需要更新
+async function checkGlobalUpdate() {
+  const currentVersion = pkg.version
+  const npmName = pkg.name
+  const { getNpmInfo } = require("@minorn-cli/get-npm-info")
+  const data = await getNpmInfo(npmName)
+  console.log(data)
 }
