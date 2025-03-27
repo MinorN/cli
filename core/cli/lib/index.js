@@ -10,12 +10,16 @@ const pathExists = require("path-exists").sync
 const pkg = require("../package.json")
 const constant = require("./const")
 
+let args
+
 function core() {
   try {
     checkPkgVersion()
     checkNodeVersion()
     checkRoot()
     checkUserHome()
+    checkInputArgs()
+    log.verbose("debug", "test debug")
   } catch (e) {
     log.error(e.message)
   }
@@ -48,4 +52,19 @@ function checkUserHome() {
   if (!userHome || !pathExists(userHome)) {
     throw new Error(colors.red("当前登录用户主目录不存在"))
   }
+}
+
+// 检查入参
+function checkInputArgs() {
+  const minimist = require("minimist")
+  args = minimist(process.argv.slice(2))
+  checkArgs()
+}
+function checkArgs() {
+  if (args.debug) {
+    process.env.LOG_LEVEL = "verbose"
+  } else {
+    process.env.LOG_LEVEL = "info"
+  }
+  log.level = process.env.LOG_LEVEL
 }
