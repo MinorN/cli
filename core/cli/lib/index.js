@@ -2,6 +2,7 @@
 
 module.exports = core
 
+const path = require("path")
 const semver = require("semver")
 const log = require("@minorn-cli/log")
 const colors = require("colors")
@@ -10,7 +11,7 @@ const pathExists = require("path-exists").sync
 const pkg = require("../package.json")
 const constant = require("./const")
 
-let args
+let args, config
 
 function core() {
   try {
@@ -19,6 +20,7 @@ function core() {
     checkRoot()
     checkUserHome()
     checkInputArgs()
+    checkEnv()
     log.verbose("debug", "test debug")
   } catch (e) {
     log.error(e.message)
@@ -67,4 +69,29 @@ function checkArgs() {
     process.env.LOG_LEVEL = "info"
   }
   log.level = process.env.LOG_LEVEL
+}
+
+// 检查环境变量
+function checkEnv() {
+  const dotEnv = require("dotenv")
+  const dotEnvPath = path.resolve(userHome, ".env")
+  if (pathExists(dotEnvPath)) {
+    config = dotEnv.config({
+      path: dotEnvPath,
+    })
+  } else {
+    createDefaultConfig()
+  }
+  log.verbose("env", process.env.CLI_HOME_PATH)
+}
+function createDefaultConfig() {
+  const cliConfig = {
+    home: userHome,
+  }
+  if (process.env.CLI_HOME) {
+    cliConfig["cliHome"] = path.join(userHome, process.env.CLI_HOME)
+  } else {
+    cliConfig["cliHome"] = path.join(userHome, constant.DEFAULT_CLI_HOME)
+  }
+  process.env.CLI_HOME_PATH = cliConfig.cliHome
 }
