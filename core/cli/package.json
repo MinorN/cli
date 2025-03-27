@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@minorn-cli/get-npm-info": "^1.0.3",
+    "@minorn-cli/init": "^1.0.3",
     "@minorn-cli/log": "^1.0.3",
     "@minorn-cli/utils": "^1.0.3",
     "colors": "1.4.0",
