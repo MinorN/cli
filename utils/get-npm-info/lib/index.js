@@ -1,6 +1,5 @@
 "use strict"
 
-module.exports = { getNpmInfo }
 const axios = require("axios")
 const semver = require("semver")
 const urlJoin = require("url-join")
@@ -29,3 +28,31 @@ function getDefaultRegistry(isOriginal = false) {
     ? "https://registry.npmjs.org"
     : "https://registry.npmmirror.com/"
 }
+
+async function getNpmVersions(npmName, registry) {
+  const data = await getNpmInfo(npmName, registry)
+  if (data) {
+    return Object.keys(data.versions)
+  } else {
+    return []
+  }
+}
+
+async function getNpmSemverVersions(baseVersion, versions) {
+  versions = versions
+    .filter((version) => semver.satisfies(version, `^${baseVersion}`))
+    .sort((a, b) => {
+      return semver.gt(b, a)
+    })
+  return versions
+}
+
+async function getNpmSemverVersion(npmName, baseVersion, registry) {
+  const versions = await getNpmVersions(npmName, registry)
+  const newVersions = await getNpmSemverVersions(baseVersion, versions)
+  if (newVersions && newVersions.length > 0) {
+    return newVersions[0]
+  }
+}
+
+module.exports = { getNpmInfo, getNpmVersions, getNpmSemverVersion }
