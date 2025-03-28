@@ -23,6 +23,7 @@
     "test": "node ./__tests__/core.test.js"
   },
   "dependencies": {
+    "@minorn-cli/exec": "^1.0.3",
     "@minorn-cli/get-npm-info": "^1.0.3",
     "@minorn-cli/init": "^1.0.3",
     "@minorn-cli/log": "^1.0.3",
