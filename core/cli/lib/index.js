@@ -1,18 +1,17 @@
-"use strict"
+'use strict'
 
 module.exports = core
 
-const path = require("path")
-const semver = require("semver")
-const commander = require("commander")
-const log = require("@minorn-cli/log")
-const colors = require("colors")
-const userHome = require("user-home")
-const pathExists = require("path-exists").sync
-const pkg = require("../package.json")
-const constant = require("./const")
-const init = require("@minorn-cli/init")
-const exec = require("@minorn-cli/exec")
+const path = require('path')
+const semver = require('semver')
+const commander = require('commander')
+const log = require('@minorn-cli/log')
+const colors = require('colors')
+const userHome = require('user-home')
+const pathExists = require('path-exists').sync
+const pkg = require('../package.json')
+const constant = require('./const')
+const exec = require('@minorn-cli/exec')
 
 let args, config
 
@@ -32,7 +31,6 @@ async function core() {
 
 async function prepare() {
   checkPkgVersion()
-  checkNodeVersion()
   checkRoot()
   checkUserHome()
   // checkInputArgs()
@@ -45,27 +43,27 @@ function checkPkgVersion() {
   // log.notice("cli", pkg.version)
 }
 
-function checkNodeVersion() {
-  const currentVersion = process.version
-  const lowestVersion = constant.LOWEST_NODE_VERSION
-  if (!semver.gte(currentVersion, lowestVersion)) {
-    throw new Error(
-      colors.red(
-        `minorn-cli 需要安装 v${lowestVersion} 以上版本的 Node.js,当前版本是${currentVersion}`
-      )
-    )
-  }
-}
+// function checkNodeVersion() {
+//   const currentVersion = process.version
+//   const lowestVersion = constant.LOWEST_NODE_VERSION
+//   if (!semver.gte(currentVersion, lowestVersion)) {
+//     throw new Error(
+//       colors.red(
+//         `minorn-cli 需要安装 v${lowestVersion} 以上版本的 Node.js,当前版本是${currentVersion}`
+//       )
+//     )
+//   }
+// }
 
 // 检查 root 账户启动，如果是 root 降级处理(mac)
 function checkRoot() {
-  require("root-check")()
+  require('root-check')()
 }
 
 // 判断用户主目录是否存在
 function checkUserHome() {
   if (!userHome || !pathExists(userHome)) {
-    throw new Error(colors.red("当前登录用户主目录不存在"))
+    throw new Error(colors.red('当前登录用户主目录不存在'))
   }
 }
 
@@ -77,17 +75,17 @@ function checkInputArgs() {
 }
 function checkArgs() {
   if (args.debug) {
-    process.env.LOG_LEVEL = "verbose"
+    process.env.LOG_LEVEL = 'verbose'
   } else {
-    process.env.LOG_LEVEL = "info"
+    process.env.LOG_LEVEL = 'info'
   }
   log.level = process.env.LOG_LEVEL
 }
 
 // 检查环境变量
 function checkEnv() {
-  const dotEnv = require("dotenv")
-  const dotEnvPath = path.resolve(userHome, ".env")
+  const dotEnv = require('dotenv')
+  const dotEnvPath = path.resolve(userHome, '.env')
   if (pathExists(dotEnvPath)) {
     config = dotEnv.config({
       path: dotEnvPath,
@@ -101,9 +99,9 @@ function createDefaultConfig() {
     home: userHome,
   }
   if (process.env.CLI_HOME) {
-    cliConfig["cliHome"] = path.join(userHome, process.env.CLI_HOME)
+    cliConfig['cliHome'] = path.join(userHome, process.env.CLI_HOME)
   } else {
-    cliConfig["cliHome"] = path.join(userHome, constant.DEFAULT_CLI_HOME)
+    cliConfig['cliHome'] = path.join(userHome, constant.DEFAULT_CLI_HOME)
   }
   process.env.CLI_HOME_PATH = cliConfig.cliHome
 }
@@ -112,7 +110,7 @@ function createDefaultConfig() {
 async function checkGlobalUpdate() {
   const currentVersion = pkg.version
   const npmName = pkg.name
-  const { getNpmSemverVersion } = require("@minorn-cli/get-npm-info")
+  const { getNpmSemverVersion } = require('@minorn-cli/get-npm-info')
   const lastVersion = await getNpmSemverVersion(npmName, currentVersion)
   if (lastVersion && semver.gt(lastVersion, currentVersion)) {
     log.warn(
@@ -127,34 +125,34 @@ async function checkGlobalUpdate() {
 function registerCommand() {
   program
     .name(Object.keys(pkg.bin)[0])
-    .usage("<command> [options]")
+    .usage('<command> [options]')
     .version(pkg.version)
-    .option("-d, --debug", "是否开启调试模式", false)
-    .option("-tp, --targetPath <targetPath>", "是否指定本地调试文件路径", "")
+    .option('-d, --debug', '是否开启调试模式', false)
+    .option('-tp, --targetPath <targetPath>', '是否指定本地调试文件路径', '')
 
   program
-    .command("init [projectName]")
-    .option("-f, --force", "是否强制初始化")
+    .command('init [projectName]')
+    .option('-f, --force', '是否强制初始化')
     .action(exec)
 
-  program.on("option:debug", function () {
+  program.on('option:debug', function () {
     if (program.debug) {
-      process.env.LOG_LEVEL = "verbose"
+      process.env.LOG_LEVEL = 'verbose'
     } else {
-      process.env.LOG_LEVEL = "info"
+      process.env.LOG_LEVEL = 'info'
     }
     log.level = process.env.LOG_LEVEL
   })
 
-  program.on("option:targetPath", function () {
+  program.on('option:targetPath', function () {
     process.env.CLI_TARGET_PATH = program.targetPath
   })
 
-  program.on("command:*", function (obj) {
+  program.on('command:*', function (obj) {
     const avaliableCommands = program.commands.map((cmd) => cmd.name())
-    console.log(colors.red("未知的命令：" + obj[0]))
+    console.log(colors.red('未知的命令：' + obj[0]))
     if (avaliableCommands.length > 0) {
-      console.log(colors.red("可用命令" + avaliableCommands.join(",")))
+      console.log(colors.red('可用命令' + avaliableCommands.join(',')))
     }
   })
 
