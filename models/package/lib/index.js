@@ -45,8 +45,6 @@ class Package {
 
   // 判断当前pkg是否存在
   async exists() {
-    console.log("this.storeDir", this.storeDir)
-    console.log("this.cacheFilePath", this.cacheFilePath)
     if (this.storeDir) {
       await this.prepare()
       return pathExists(this.cacheFilePath)
@@ -88,19 +86,27 @@ class Package {
   }
 
   getRootFilePath() {
-    // 找到 package.json
-    const dir = pkgDir(this.targetPath)
-    if (!dir) {
-      return null
+    function _getRootFile(targetPath) {
+      // 找到 package.json
+      const dir = pkgDir(targetPath)
+      if (!dir) {
+        return null
+      }
+      // 读取 package.json
+      const pkgFile = require(path.resolve(dir, "package.json"))
+      if (!pkgFile || (!pkgFile.main && !pkgFile.lib)) {
+        return null
+      }
+      // 找到main/lib
+      // 路径兼容
+      return formatPath(path.resolve(dir, pkgFile.main))
     }
-    // 读取 package.json
-    const pkgFile = require(path.resolve(dir, "package.json"))
-    if (!pkgFile || (!pkgFile.main && !pkgFile.lib)) {
-      return null
+    if (this.storeDir) {
+      return _getRootFile(this.cacheFilePath)
+    } else {
+      // 不使用缓存
+      return _getRootFile(this.targetPath)
     }
-    // 找到main/lib
-    // 路径兼容
-    return formatPath(path.resolve(dir, pkgFile.main))
   }
 }
 
