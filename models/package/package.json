@@ -25,5 +25,10 @@
   },
   "bugs": {
     "url": "https://github.com/MinorN/cli/issues"
+  },
+  "dependencies": {
+    "@minorn-cli/format-path": "^1.0.3",
+    "@minorn-cli/utils": "^1.0.3",
+    "pkg-dir": "5.0.0"
   }
 }

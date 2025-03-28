@@ -1,5 +1,5 @@
-function utils() {
-  console.log('===xxx123123')
+function isObject(obj) {
+  return Object.prototype.toString.call(obj) === "[object Object]"
 }
 
-module.exports = utils
+module.exports = { isObject }

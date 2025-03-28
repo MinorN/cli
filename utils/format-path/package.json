@@ -1,5 +1,5 @@
 {
-  "name": "@minorn-cli/exec",
+  "name": "@minorn-cli/format-path",
   "version": "1.0.3",
   "description": "> TODO: description",
   "author": "minorn <1481700559@qq.com>",
@@ -21,14 +21,9 @@
     "url": "git+https://github.com/MinorN/cli.git"
   },
   "scripts": {
-    "test": "node ./__tests__/@minorn-cli/exec.test.js"
+    "test": "node ./__tests__/@minorn-cli/format-path.test.js"
   },
   "bugs": {
     "url": "https://github.com/MinorN/cli/issues"
-  },
-  "dependencies": {
-    "@minorn-cli/log": "^1.0.3",
-    "@minorn-cli/package": "^1.0.3",
-    "@minorn-cli/utils": "^1.0.3"
   }
 }
