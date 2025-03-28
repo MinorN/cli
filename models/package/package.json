@@ -28,7 +28,10 @@
   },
   "dependencies": {
     "@minorn-cli/format-path": "^1.0.3",
+    "@minorn-cli/get-npm-info": "^1.0.3",
     "@minorn-cli/utils": "^1.0.3",
+    "npminstall": "4.10.0",
+    "path-exists": "4.0.0",
     "pkg-dir": "5.0.0"
   }
 }
