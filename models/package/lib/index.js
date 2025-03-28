@@ -3,6 +3,7 @@
 const pkgDir = require("pkg-dir").sync
 const path = require("path")
 const npminstall = require("npminstall")
+const fse = require("fs-extra")
 const pathExists = require("path-exists").sync
 const { isObject } = require("@minorn-cli/utils")
 const { formatPath } = require("@minorn-cli/format-path")
@@ -27,6 +28,9 @@ class Package {
   }
 
   async prepare() {
+    if (this.storeDir && !pathExists(this.storeDir)) {
+      fse.mkdirpSync(this.storeDir)
+    }
     if (this.packageName === "latest") {
       this.packageVersion = await getNpmLatestVersion(this.packageName)
     }
@@ -61,7 +65,27 @@ class Package {
     })
   }
 
-  update() {}
+  getCacheFilePath(version) {
+    path.resolve(
+      this.storeDir,
+      `_${this.cacheFilePathPrefix}@${version}@${this.packageName}`
+    )
+  }
+
+  async update() {
+    await this.prepare()
+    const latestVersion = await getNpmLatestVersion(this.packageName)
+    const latestFilePath = this.getCacheFilePath(latestVersion)
+    if (!pathExists(latestFilePath)) {
+      await npminstall({
+        root: this.targetPath,
+        storeDir: this.storeDir,
+        register: getDefaultRegistry(),
+        pkgs: [{ name: this.packageName, version: latestVersion }],
+      })
+      this.packageVersion = latestVersion
+    }
+  }
 
   getRootFilePath() {
     // 找到 package.json

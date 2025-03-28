@@ -30,6 +30,7 @@
     "@minorn-cli/format-path": "^1.0.3",
     "@minorn-cli/get-npm-info": "^1.0.3",
     "@minorn-cli/utils": "^1.0.3",
+    "fs-extra": "9.0.1",
     "npminstall": "4.10.0",
     "path-exists": "4.0.0",
     "pkg-dir": "5.0.0"
