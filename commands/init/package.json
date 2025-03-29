@@ -27,6 +27,7 @@
     "url": "https://github.com/MinorN/cli/issues"
   },
   "dependencies": {
-    "@minorn-cli/command": "^1.0.3"
+    "@minorn-cli/command": "^1.0.3",
+    "@minorn-cli/log": "^1.0.3"
   }
 }
