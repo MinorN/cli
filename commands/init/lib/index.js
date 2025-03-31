@@ -3,6 +3,7 @@
 const fs = require('fs')
 const inquirer = require('inquirer')
 const fse = require('fs-extra')
+const semver = require('semver')
 const Command = require('@minorn-cli/command')
 const log = require('@minorn-cli/log')
 
@@ -78,6 +79,11 @@ class InitCommand extends Command {
   }
 
   async getProjectInfo() {
+    function isValidName(v) {
+      return /^(@[a-zA-Z0-9-_]+\/)?[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(
+        v
+      )
+    }
     const projectInfo = {}
     // 选择创建的是项目or组件
     const { type } = await inquirer.prompt({
@@ -96,6 +102,7 @@ class InitCommand extends Command {
         },
       ],
     })
+
     if (type === TYPE_PROJECT) {
       // 获取项目的基本信息
       const o = await inquirer.prompt([
@@ -105,7 +112,14 @@ class InitCommand extends Command {
           message: '请输入项目名称',
           default: '',
           validate: function (v) {
-            return typeof v === 'string'
+            const done = this.async()
+            setTimeout(function () {
+              if (!isValidName(v)) {
+                done('请输入合法的项目名称')
+                return
+              }
+              done(null, true)
+            }, 0)
           },
           filter: function (v) {
             return v
@@ -117,9 +131,12 @@ class InitCommand extends Command {
           message: '请输入项目版本号',
           default: '1.0.0',
           validate: function (v) {
-            return typeof v === 'string'
+            return !!semver.valid(v)
           },
           filter: function (v) {
+            if (semver.valid(v)) {
+              return semver.valid(v)
+            }
             return v
           },
         },
