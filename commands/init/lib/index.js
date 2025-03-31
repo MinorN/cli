@@ -22,8 +22,10 @@ class InitCommand extends Command {
   async exec() {
     try {
       // 准备
-      const ret = await this.prepare()
-      if (ret) {
+      const projectInfo = await this.prepare()
+      if (projectInfo) {
+        log.verbose('projectInfo', projectInfo)
+        await this.downloadTemplate()
       }
       // 下载模板
       // 安装模板
@@ -84,7 +86,7 @@ class InitCommand extends Command {
         v
       )
     }
-    const projectInfo = {}
+    let projectInfo = {}
     // 选择创建的是项目or组件
     const { type } = await inquirer.prompt({
       type: 'list',
@@ -105,7 +107,7 @@ class InitCommand extends Command {
 
     if (type === TYPE_PROJECT) {
       // 获取项目的基本信息
-      const o = await inquirer.prompt([
+      const project = await inquirer.prompt([
         {
           type: 'input',
           name: 'projecrName',
@@ -141,13 +143,19 @@ class InitCommand extends Command {
           },
         },
       ])
-      console.log('o', o)
+      projectInfo = {
+        type,
+        ...project,
+      }
     } else if (type === TYPE_COMPONENT) {
     }
+
     log.verbose('type', type)
 
     return projectInfo
   }
+
+  async downloadTemplate() {}
 }
 
 function init(argv) {
