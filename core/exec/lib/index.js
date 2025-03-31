@@ -1,31 +1,31 @@
-'use strict'
+"use strict"
 
-const Package = require('@minorn-cli/package')
-const log = require('@minorn-cli/log')
-const path = require('path')
-const cp = require('child_process')
+const Package = require("@minorn-cli/package")
+const log = require("@minorn-cli/log")
+const path = require("path")
+const cp = require("child_process")
 
 const SETTINGS = {
-  init: '@minorn-cli/init',
+  init: "@minorn-cli/init",
 }
 
-const CACHE_DIR = 'dependencies'
+const CACHE_DIR = "dependencies"
 
 async function exec() {
   let targetPath = process.env.CLI_TARGET_PATH
-  let storeDir = ''
+  let storeDir = ""
   let pkg
   const homePath = process.env.CLI_HOME_PATH
   const cmdObj = arguments[arguments.length - 1]
   const cmdName = cmdObj.name()
   const packageName = SETTINGS[cmdName]
-  const packageVersion = 'latest'
+  const packageVersion = "latest"
   if (!targetPath) {
     // 指定了targetpath
     targetPath = path.resolve(homePath, CACHE_DIR)
-    storeDir = path.resolve(targetPath, 'node_modules') // 缓存路径
-    log.verbose('targetPath', targetPath)
-    log.verbose('storeDir', storeDir)
+    storeDir = path.resolve(targetPath, "node_modules") // 缓存路径
+    log.verbose("targetPath", targetPath)
+    log.verbose("storeDir", storeDir)
     pkg = new Package({
       targetPath,
       storeDir,
@@ -54,24 +54,24 @@ async function exec() {
       Object.keys(cmd).forEach((key) => {
         if (
           cmd.hasOwnProperty(key) &&
-          !key.startsWith('_') &&
-          key !== 'parent'
+          !key.startsWith("_") &&
+          key !== "parent"
         ) {
           o[key] = cmd[key]
         }
       })
       args[args.length - 1] = o
       const code = `require('${rootFile}').call(null,${JSON.stringify(args)})`
-      const child = cp.spawn('node', ['-e', code], {
+      const child = cp.spawn("node", ["-e", code], {
         cwd: process.cwd(),
-        stdio: 'inherit',
+        stdio: "inherit",
       })
-      child.on('error', (e) => {
+      child.on("error", (e) => {
         log.error(e.message)
         proceess.exit(1)
       })
-      child.on('exit', (e) => {
-        console.log('命令执行成功')
+      child.on("exit", (e) => {
+        console.log("命令执行成功")
         process.exit(e)
       })
       // require(rootFile).call(null, Array.from(arguments))
@@ -83,9 +83,9 @@ async function exec() {
 }
 
 function spawn(command, args, options) {
-  const win32 = process.platform === 'win32'
-  const cmd = win32 ? 'cmd' : command
-  const cmdArgs = win32 ? ['/c'].concat(command) : args
+  const win32 = process.platform === "win32"
+  const cmd = win32 ? "cmd" : command
+  const cmdArgs = win32 ? ["/c"].concat(command) : args
   return cp.spawn(cmd, cmdArgs, options || {})
 }
 

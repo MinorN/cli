@@ -28,6 +28,8 @@
   },
   "dependencies": {
     "@minorn-cli/command": "^1.0.3",
-    "@minorn-cli/log": "^1.0.3"
+    "@minorn-cli/log": "^1.0.3",
+    "fs-extra": "9.0.1",
+    "inquirer": "7.3.3"
   }
 }
