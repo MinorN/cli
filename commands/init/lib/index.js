@@ -6,6 +6,9 @@ const fse = require('fs-extra')
 const Command = require('@minorn-cli/command')
 const log = require('@minorn-cli/log')
 
+const TYPE_PROJECT = 'project'
+const TYPE_COMPONENT = 'component'
+
 class InitCommand extends Command {
   constructor(argv) {
     super(argv)
@@ -60,6 +63,7 @@ class InitCommand extends Command {
         }
       }
     }
+    return await this.getProjectInfo()
     // 是否是 force
     // 组件/项目
     // 获取基本信息
@@ -71,6 +75,61 @@ class InitCommand extends Command {
       (file) => !file.startsWith('.') && !['node_modules'].includes(file)
     )
     return !fileList || fileList.length <= 0
+  }
+
+  async getProjectInfo() {
+    const projectInfo = {}
+    // 选择创建的是项目or组件
+    const { type } = await inquirer.prompt({
+      type: 'list',
+      message: '请选择初始化类型',
+      name: 'type',
+      default: TYPE_PROJECT,
+      choices: [
+        {
+          name: '项目',
+          value: TYPE_PROJECT,
+        },
+        {
+          name: '组件',
+          value: TYPE_COMPONENT,
+        },
+      ],
+    })
+    if (type === TYPE_PROJECT) {
+      // 获取项目的基本信息
+      const o = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'projecrName',
+          message: '请输入项目名称',
+          default: '',
+          validate: function (v) {
+            return typeof v === 'string'
+          },
+          filter: function (v) {
+            return v
+          },
+        },
+        {
+          type: 'input',
+          name: 'projectVersion',
+          message: '请输入项目版本号',
+          default: '1.0.0',
+          validate: function (v) {
+            return typeof v === 'string'
+          },
+          filter: function (v) {
+            return v
+          },
+        },
+      ])
+      console.log('o', o)
+    } else if (type === TYPE_COMPONENT) {
+    }
+    log.verbose('type', type)
+
+    return projectInfo
   }
 }
 
