@@ -1,5 +1,5 @@
 {
-  "name": "@minorn-cli/init",
+  "name": "@minorn-cli/request",
   "version": "1.0.3",
   "description": "> TODO: description",
   "author": "minorn <1481700559@qq.com>",
@@ -14,25 +14,19 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "https://registry.npmjs.org"
+    "registry": "https://registry.npmmirror.com/"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MinorN/cli.git"
   },
   "scripts": {
-    "test": "node ./__tests__/@minorn-cli/init.test.js"
+    "test": "node ./__tests__/@minorn-cli/request.test.js"
   },
   "bugs": {
     "url": "https://github.com/MinorN/cli/issues"
   },
   "dependencies": {
-    "@minorn-cli/command": "^1.0.3",
-    "@minorn-cli/log": "^1.0.3",
-    "@minorn-cli/request": "^1.0.3",
-    "fs-extra": "9.0.1",
-    "inquirer": "7.3.3",
-    "kebab-case": "1.0.0",
-    "semver": "7.3.4"
+    "axios": "^1.8.4"
   }
 }

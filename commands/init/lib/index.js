@@ -6,6 +6,7 @@ const fse = require('fs-extra')
 const semver = require('semver')
 const Command = require('@minorn-cli/command')
 const log = require('@minorn-cli/log')
+const getPorjectTemplate = require('./getPorjectTemplate')
 
 const TYPE_PROJECT = 'project'
 const TYPE_COMPONENT = 'component'
@@ -24,6 +25,7 @@ class InitCommand extends Command {
       // 准备
       const projectInfo = await this.prepare()
       if (projectInfo) {
+        this.projectInfo = projectInfo
         log.verbose('projectInfo', projectInfo)
         await this.downloadTemplate()
       }
@@ -35,6 +37,13 @@ class InitCommand extends Command {
   }
 
   async prepare() {
+    // 判断项目模板是否存在
+    const template = await getPorjectTemplate()
+    console.log(template)
+    if (!template || template.length <= 0) {
+      throw new Error('项目模板不存在')
+    }
+    this.template = template
     // 当前目录是否为空
     const localPath = process.cwd()
 
@@ -155,7 +164,9 @@ class InitCommand extends Command {
     return projectInfo
   }
 
-  async downloadTemplate() {}
+  async downloadTemplate() {
+    console.log('template', this.template, this.projectInfo)
+  }
 }
 
 function init(argv) {
